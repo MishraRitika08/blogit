@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p class="card-title fw-bold text-danger" >{{ post.title|title}}</p>
+    <p>{{ post.content }}</p>
+    <p>Author: {{ post.author }}</p>
+
+    {% if user.is_authenticated and user == post.author %}
+    <div class="d-flex gap-2">
+    <form method="GET" action="{% url 'blog:blog_update' post.id %}"
+        class="d-inline">
+        {% csrf_token %}    
+        <button type="submit" class="btn btn-primary">
+            Edit Blog
+        </button>
+    </form>
+    
+    <form method="POST" action="{% url 'blog:blog_delete' post.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">
+        Delete 
+    </button>
+    </form>
+    </div>
+
+    {% elif user.is_authenticated and user != post.author %}
+    <a href="{% url 'blog:add_comment' post.id %}" class="btn btn-success">Add Comment</a>
+       
+    {% endif %}
+    
+    {% if comments %}
+    {% for comment in comments %}
+    <div class="card mt-3">
+        <div class="card-body">
+            <p class="card-text">{{ comment.content }}</p>
+            <p class="card-text"><small class="text-muted">By {{ comment.author }} on {{ comment.created_at }}</small></p>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No comments yet.</p>
+    {% endif %}
+
+   
+    {% if tags %}
+    {% for tag in tags %}
+    <div class="card mt-3">
+        <div class="card-body">
+            <p class="card-text">{{ tag.name }}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No tags yet.</p>
+    {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,42 @@
+What is a serializer?
+
+A serializer converts complex Django objects (such as model instances) into JSON-compatible data.
+
+It also validates incoming JSON data before saving it to the database.
+Serialization converts complex Django model instances into JSON-compatible data so that clients can consume it. Deserialization handles incoming JSON data, converts it into Python data, and validates it before creating or updating database records. Django REST Framework serializers handle both processes."
+
+One distinction worth remembering: deserialization does not itself mean saving to the database. Validation and saving are separate steps.
+
+For example:
+
+Django object:
+Post(title="Learning Django", content="My first blog",)
+
+
+JSON response:
+{
+    "id": 1,
+    "title": "Learning Django",
+    "content": "My first blog"
+}
+
+Component	Purpose
+ModelSerializer	Automatically generates serializer fields
+model	Specifies the Django model
+fields	Specifies fields to expose
+read_only_fields	Prevents clients from modifying these fields
+
+Interview question: Why ModelSerializer instead of Serializer?
+
+ModelSerializer automatically generates fields, validators, and default create/update methods based on your Django model.
+
+With a regular Serializer, you generally define these yourself.
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+Without it, the browser won't send the selected image as a multipart file upload.<form enctype = "multipart/form-data">
