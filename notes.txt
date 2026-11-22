@@ -40,3 +40,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 Without it, the browser won't send the selected image as a multipart file upload.<form enctype = "multipart/form-data">
+Production docs:
+Package	Purpose
+Gunicorn	Runs Django in production
+WhiteNoise	Serves CSS, JS and static files
+dj-database-url	Reads PostgreSQL connection URL
+psycopg2-binary	Connects Django to PostgreSQL
+
+These are part of Render's recommended Django deployment setup. 
+Render Docs
