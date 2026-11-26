@@ -2,7 +2,14 @@
 
 {% block content %}
     <p class="card-title fw-bold text-danger" >{{ post.title|title}}</p>
-    <p>{{ post.content }}</p>
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" class="card-img-top center mb-4 img-thumbnail"
+                    style="height: 300px; width: 50%; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light center" style="height: 500px; width: 50%;">
+                </div>
+                {% endif %}
+    <p>{{ post.content|linebreaks }}</p>
     <p>Author: {{ post.author }}</p>
 
     {% if user.is_authenticated and user == post.author %}
