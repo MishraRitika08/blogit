@@ -6,6 +6,11 @@
 
     {% for blog in blogs %}
         <div class="card mb-3">
+            {% if blog.image %}
+            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="img-fluid card-img-top img-thumbnail" style="max-height: 300px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-light" style="height: 220px;"></div>
+            {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ blog.title }}</h5>
                 <p class="card-text">{{ blog.content|truncatewords:20 }}</p>
@@ -16,7 +21,7 @@
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </div>
-        </div>
+        </div>        
     {% empty %}
         <p>No blogs available.</p>
     {% endfor %}

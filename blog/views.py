@@ -9,14 +9,16 @@ from blog.models import Post, Tag, Comment
 
 # Create your views here.
 def home(request):
-    # if request.user.is_authenticated:
-    #     return redirect('blog:dashboard')
     posts = Post.objects.all().order_by('-created_at')
     paginator = Paginator(posts, 5)  # Show 5 posts per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    tags = Tag.objects.all()
+    featured_post = Post.objects.first()
     context = {
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        'tags': tags,
+        'featured_post': featured_post,
     }
     return render(request, 'blog/home.html', context=context)
 
