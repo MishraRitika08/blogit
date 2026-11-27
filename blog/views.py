@@ -6,11 +6,12 @@ from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 
 from blog.models import Post, Tag, Comment
+from blog.services import ai_service
 
 # Create your views here.
 def home(request):
     posts = Post.objects.all().order_by('-created_at')
-    paginator = Paginator(posts, 5)  # Show 5 posts per page
+    paginator = Paginator(posts, 10)  # Show 5 posts per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     tags = Tag.objects.all()
@@ -133,3 +134,23 @@ def add_comment_view(request, blog_id): #create comment
     
     return render(request, 'blog/add_comment.html', context={'post': post})
 
+def ai_generate_blog_view(request):
+    if request.method == 'POST':
+        topic = request.POST.get('topic')
+        messages.info(request, f'Generating blog for topic: {topic}')
+
+        try:
+            messages.info(request, 'Sending request to AI service...')
+            response = ai_service.generate_blog(topic)
+            messages.success(request, 'Blog generated successfully!')
+            title, content = response.split('\n', 1)
+            context = {
+                'title': title,
+                'content': content,
+            }
+            return render(request, 'blog/add_blog.html', context=context)
+        except Exception as e:
+            messages.error(request, f'Error generating blog: {str(e)}')
+            return redirect('blog:create_blog')
+
+    return render(request, 'blog/add_blog.html')

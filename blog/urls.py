@@ -12,4 +12,5 @@ urlpatterns = [
     path('blogs/<int:blog_id>/update/', views.post_update_view, name='blog_update'), #UPDATE
     path('blogs/<int:blog_id>/delete/', views.post_delete_view, name='blog_delete'), #DELETE
 
+    path('generate_blog/', views.ai_generate_blog_view, name='generate_blog'), #GENERATE BLOG WITH AI 
 ]

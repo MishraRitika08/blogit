@@ -1,21 +1,31 @@
-import os
-from dotenv import load_dotenv
-from groq import Groq
-load_dotenv()
+import requests
 
-client = Groq( api_key=os.getenv("GROQ_API_KEY") ) #Groq() creates a client that communicates with Groq's API
+def generate_blog(topic):
+    url = "http://localhost:11434/api/generate"
 
-def test_groq_connection():
+    prompt = f"""
+    Write a concise blog about: {topic}
 
-    response = client.chat.completions.create(
-        model=os.getenv("GROQ_MODEL"), #Which LLM should process the request
-        messages=[ #Conversation sent to the LLM
-            {
-                "role": "user", #Message from the user
-                "content": "Say hello in one sentence." #Actual prompt
-            }
-        ]
-    )
-    return response.choices[0].message.content 
-# choices-> Generated response options
-# message.content -> Generated text
+    Include:
+    - An engaging title
+    - Short introduction
+    - 2-3 headings with useful information
+    - Short conclusion
+
+    Keep it under 400 words. Avoid repetition.
+    Return the title on the first line.
+    """
+
+    payload = {
+        "model": "qwen2.5:3b",
+        "prompt": prompt,
+        "stream": False,
+        "options": {
+            "num_predict": 350
+        }
+    }
+
+    response = requests.post(url, json=payload, timeout=120)
+    response.raise_for_status()
+
+    return response.json()["response"]
